@@ -32,5 +32,15 @@ export const DeleteTask = createAsyncThunk("task/deleteTask", async taskId => {
     }
 })
 
-
+export const updateTask = createAsyncThunk("task/updateTask", async (taskId,cc)  => {
+    try {
+        const {data} = await axios.put(`http://localhost:5000/Task/${taskId}`, cc) 
+        // console.log("sakshi", update);
+        return data.result
+        // console.log(taskId);
+        // console.log(cc);
+    } catch (error) {
+        return error.message
+    }
+})
 

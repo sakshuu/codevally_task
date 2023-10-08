@@ -1,17 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { DeleteTask, showTask } from '../redux/action/taskAction'
-import { useNavigate } from 'react-router-dom'
+import { DeleteTask, showTask, updateTask } from '../redux/action/taskAction'
+import { useFormik } from 'formik';
+import * as yup from "yup"
 
 const Home = () => {
   const dispatch = useDispatch()
   const {tasks, toggle} = useSelector(state => state.allTask)
-  const [editTask, seteditTask] = useState([])
+  const [editTask, seteditTask] = useState({})
   const [deleteTask, setdeleteTask] = useState(null)
 
+  const formik = useFormik({
+    enableReinitialize:true,
+    initialValues: {
+      task:editTask?.task,
+      desc:editTask?.desc,
+    },
+    validationSchema: yup.object({
+      task:yup.string().required("Please provide task"),
+      desc:yup.string().required("Please provide desc"),
+    }),
+
+    // const handleSubmit = (values) => {
+     
+    // };
+    
+    onSubmit: (values) => {
+ dispatch(updateTask(editTask._id,values))
+ console.log(values);
+    }
+  })
+  // console.log(edi);
+// console.log(editTask._id);
   useEffect(() => {
     dispatch(showTask())
   }, [toggle])
+  
+  // useEffect(() => {
+    
+  // }, [updatetasks])
   
   
   return <>
@@ -69,6 +96,8 @@ const Home = () => {
       <div class="modal fade main" id="editModal">
         <div class="modal-dialog">
           <div class="modal-content">
+
+
             <div class="modal-header">
               <h5 class="modal-title" id="editModal">Edit Task</h5>
               <button
@@ -76,32 +105,45 @@ const Home = () => {
                 class="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-              ></button>
+                ></button>
             </div>
+                <form onSubmit={formik.handleSubmit}>
             <div class="modal-body">
               <div>
                 <label for="mtask" class="form-label">First task</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="mtask"
+                  id="task"
+                  value={formik.values.task}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                         formik.errors.task &&
+                         formik.touched.task &&
+                         "is-invalid"}
                   placeholder="Enter Your task"
                 />
-                <div class="valid-feedback">Looks good!</div>
-                <div class="invalid-feedback">Please add task.</div>
+                <div class="invalid-feedback">{formik.errors.task}</div>
               </div>
               <div class="mt-2">
                 <label for="mdesc" class="form-label">Description</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="mdesc"
+                  id="desc"
+                  value={formik.values.desc}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                         formik.errors.desc &&
+                         formik.touched.desc &&
+                         "is-invalid"}
                   placeholder="Enter task description"
                 />
-                <div class="valid-feedback">Looks good!</div>
-                <div class="invalid-feedback">Please add description</div>
+                <div class="invalid-feedback"> {formik.errors.desc}</div>
               </div>
-              <button type="button" class="btn btn-primary w-100 mt-3">
+              <button type="submit" class="btn btn-primary w-100 mt-3" data-bs-dismiss="modal">
                 Update Task
               </button>
               <button
@@ -112,6 +154,7 @@ const Home = () => {
                 Close
               </button>
             </div>
+            </form>
           </div>
         </div>
       </div>
