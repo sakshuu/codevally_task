@@ -13,8 +13,8 @@ const TaskForm = () => {
 
   const formik = useFormik({
     initialValues: {
-       task:"",
-       desc:""
+       task:"Task 1",
+       desc:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint nisi voluptas quos dicta aliquam sunt quasi fuga, cupiditate error reprehenderit vel? Aspernatur dolorum consequuntur itaque nam blanditiis quod laboriosam dolore? "
     },
     validationSchema: yup.object({
       task:yup.string().required("Please provide Task"),
@@ -30,7 +30,8 @@ const TaskForm = () => {
   
   
  
-  return <> 
+  return <>
+  
       <div class="container main">
         <div class="row">
           <div class="col-sm-6 offset-sm-3">
@@ -42,15 +43,14 @@ const TaskForm = () => {
                   <p for="task" class="form-label">First task</p>
                   <input
                     type="text"
-                    class="form-control"
                     id="task"
                     value={formik.values.task}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     className={
-                            formik.errors.task &&
-                           formik.touched.task &&
-                           "is-invalid"}
+                            formik.errors.task && formik.touched.task 
+                           ? "form-control is-invalid"
+                           : "form-control"}
                     placeholder="Enter Your task"
                   />
                   <p class="invalid-feedback">
@@ -59,19 +59,20 @@ const TaskForm = () => {
                 </div>
                 <div class="mt-2">
                   <p for="desc" class="form-label">Description</p>
-                  <input
+                  <textarea
                     type="text"
-                    class="form-control"
+                    rows={3}
                     id="desc"
                     value={formik.values.desc}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     className={
-                       formik.errors.desc &&
-                       formik.touched.desc &&
-                       "is-invalid"}
+                       formik.errors.desc && formik.touched.desc
+                       ? "form-control is-invalid"
+                       : "form-control"}
+
                     placeholder="Enter task description"
-                  />
+                  ></textarea>
 
                   <p class="invalid-feedback">
                   {

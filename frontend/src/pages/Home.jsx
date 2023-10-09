@@ -6,7 +6,7 @@ import * as yup from "yup"
 
 const Home = () => {
   const dispatch = useDispatch()
-  const {tasks, toggle} = useSelector(state => state.allTask)
+  const {tasks, toggle, updatetasks} = useSelector(state => state.allTask)
   const [editTask, seteditTask] = useState({})
   const [deleteTask, setdeleteTask] = useState(null)
 
@@ -26,8 +26,9 @@ const Home = () => {
     // };
     
     onSubmit: (values) => {
- dispatch(updateTask(editTask._id,values))
- console.log(values);
+      
+      // console.log(values, editTask._id  );
+ dispatch(updateTask({values,id:editTask._id}))
     }
   })
   // console.log(edi);
@@ -43,7 +44,7 @@ const Home = () => {
   
   return <>
 {/* <pre>
-  {JSON.stringify(tasks,null,2)}
+  {JSON.stringify(updatetasks,null,2)}
 </pre> */}
 
     <div className="container main">
@@ -119,28 +120,29 @@ const Home = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className={
-                         formik.errors.task &&
-                         formik.touched.task &&
-                         "is-invalid"}
+                         formik.errors.task && formik.touched.task 
+                         ? "form-control is-invalid"
+                         : "form-control"}
                   placeholder="Enter Your task"
                 />
                 <div class="invalid-feedback">{formik.errors.task}</div>
               </div>
               <div class="mt-2">
                 <label for="mdesc" class="form-label">Description</label>
-                <input
+                <textarea
                   type="text"
                   class="form-control"
                   id="desc"
+                  rows={3}
                   value={formik.values.desc}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className={
-                         formik.errors.desc &&
-                         formik.touched.desc &&
-                         "is-invalid"}
+                         formik.errors.desc && formik.touched.desc
+                         ? "form-control is-invalid"
+                         : "form-control"}
                   placeholder="Enter task description"
-                />
+                ></textarea>
                 <div class="invalid-feedback"> {formik.errors.desc}</div>
               </div>
               <button type="submit" class="btn btn-primary w-100 mt-3" data-bs-dismiss="modal">

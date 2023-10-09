@@ -52,8 +52,8 @@ const taskSlice =  createSlice({
         })    
         .addCase(updateTask.fulfilled, (state, {payload}) => {
             state.loading = false; 
-            state.updatetasks = payload;
-            // state.toggle = !state.toggle
+            state.updatetasks = true;
+            state.toggle = !state.toggle
         })   
         .addCase(updateTask.rejected , (state, {payload}) => {
             state.loading = false;
